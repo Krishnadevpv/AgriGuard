@@ -5,49 +5,60 @@ from PIL import Image
 
 # Configure the page
 st.set_page_config(
-    page_title="DiseaseCapt",
-    page_icon="🌿",
+    page_title="AgriGuard",
+    page_icon="🌻",
     layout="wide",
     initial_sidebar_state="expanded"
 )
 
-# Enhanced styling with contrasting colors
+# Updated styling with a fresh color palette
 st.markdown("""
     <style>
         .stApp {
-            background-color: #002B5B;
-            color: #F5C518;
+            background-color: #1B1B2F;
+            color: #E94560;
         }
         .stButton > button {
-            background-color: #F5C518;
-            color: #002B5B !important;
-            border-radius: 4px;
+            background-color: #E94560;
+            color: #FFF !important;
+            border-radius: 10px;
             font-weight: bold;
             border: none;
-            padding: 0.5rem 1rem;
+            padding: 0.7rem 1.5rem;
         }
         .css-1d391kg {
-            background-color: #001F3F;
+            background-color: #162447;
         }
         h2, h3, h1 {
-            color: #F5C518 !important;
+            color: #E94560 !important;
             font-weight: bold !important;
             text-align: center;
         }
         p, li {
-            color: #ffffff !important;
-            font-size: 16px !important;
+            color: #FFF !important;
+            font-size: 18px !important;
             text-align: center;
         }
         a {
-            color: #F5C518 !important;
+            color: #E94560 !important;
             font-weight: 500;
         }
-        .sidebar-text {
-            color: #F5C518 !important;
-            font-size: 18px;
+        .taskbar-text {
+            color: #FFF !important;
+            font-size: 20px;
             font-weight: bold;
             text-align: center;
+        }
+        .container {
+            display: flex;
+            justify-content: space-around;
+        }
+        .box {
+            background-color: #162447;
+            padding: 25px;
+            border-radius: 12px;
+            text-align: center;
+            width: 30%;
         }
     </style>
 """, unsafe_allow_html=True)
@@ -60,45 +71,54 @@ def model_prediction(test_image):
     predictions = model.predict(input_arr)
     return np.argmax(predictions)
 
-# Sidebar
-st.sidebar.title("🌱 DiseaseCapt")
-st.sidebar.markdown("<p class='sidebar-text'>Plant Disease Detection</p>", unsafe_allow_html=True)
-app_mode = st.sidebar.selectbox("Select page", ["home", "disease recognition"])
+# Taskbar
+st.markdown("""
+    <div class='taskbar-text'>
+        🌻 AgriGuard - AI for Plant Health Monitoring
+    </div>
+""", unsafe_allow_html=True)
+app_mode = st.selectbox("Select Page", ["Home", "Disease Recognition"], index=0)
 
-# Display plant icons
-st.sidebar.markdown("🌱🌿🍀🌵🌳")
-st.sidebar.markdown("""
-    DiseaseCapt helps detect plant diseases accurately.
-    Upload an image to get started!
-""")
-
-if app_mode == "home":
-    st.markdown("<h1>DiseaseCapt: Plant Disease Detection</h1>", unsafe_allow_html=True)
+if app_mode == "Home":
+    st.markdown("<h1>AgriGuard: AI-Powered Plant Disease Detection</h1>", unsafe_allow_html=True)
+    
     st.markdown("""
-        <h3>Welcome to DiseaseCapt!</h3>
-        <p>
-            DiseaseCapt is an AI-powered tool designed to detect plant diseases with precision.
-            Simply upload an image of a plant leaf, and our system will analyze and provide a diagnosis.
-        </p>
-        <h3>Tools & Libraries Used:</h3>
-        <p>
-            - Streamlit<br>
-            - TensorFlow<br>
-            - NumPy<br>
-            - PIL (Pillow)<br>
-            - Keras
-        </p>
+        <div class='container'>
+            <div class='box'>
+                <h3>About AgriGuard</h3>
+                <p>
+                    AgriGuard is a smart AI-based platform that helps farmers detect plant diseases early.
+                    Simply upload an image of a leaf, and our deep learning model will analyze and provide accurate diagnostics.
+                </p>
+            </div>
+            <div class='box'>
+                <h3>How It Works</h3>
+                <p>
+                    1. Upload a plant leaf image<br>
+                    2. AI scans and processes the image<br>
+                    3. Get instant disease identification and recommendations
+                </p>
+            </div>
+            <div class='box'>
+                <h3>Technologies Used</h3>
+                <p>
+                    - Streamlit<br>
+                    - TensorFlow & Keras<br>
+                    - NumPy<br>
+                    - Pillow
+                </p>
+            </div>
+        </div>
     """, unsafe_allow_html=True)
-    st.markdown("🌱🌿🍀🌵🌳", unsafe_allow_html=True)
 
-elif app_mode == "disease recognition":
+elif app_mode == "Disease Recognition":
     st.header("Disease Recognition")
-    test_image = st.file_uploader("Choose an Image:")
+    test_image = st.file_uploader("Upload an Image for Analysis:")
     if test_image is not None:
         st.image(test_image, use_column_width=True)
-        if st.button("Predict"):
+        if st.button("Analyze Disease"):
             st.snow()
-            st.write("Our Prediction")
+            st.write("AI Analysis Result")
             result_index = model_prediction(test_image)
             class_names = ['Apple - Apple Scab', 'Apple - Black Rot', 'Apple - Cedar Apple Rust', 'Apple - Healthy',
                            'Blueberry - Healthy', 'Cherry - Powdery Mildew', 'Cherry - Healthy', 'Corn - Gray Leaf Spot',
@@ -110,8 +130,8 @@ elif app_mode == "disease recognition":
                            'Tomato - Bacterial Spot', 'Tomato - Early Blight', 'Tomato - Late Blight', 'Tomato - Leaf Mold',
                            'Tomato - Septoria Leaf Spot', 'Tomato - Spider Mites', 'Tomato - Target Spot',
                            'Tomato - Yellow Leaf Curl Virus', 'Tomato - Mosaic Virus', 'Tomato - Healthy']
-            st.success(f"Model is Predicting it's a {class_names[result_index]}")
+            st.success(f"Diagnosis: {class_names[result_index]}")
 
 # Footer
 st.markdown("<hr style='margin: 30px 0px;'>", unsafe_allow_html=True)
-st.markdown("<p style='text-align: center; color: #F5C518;'>DiseaseCapt © 2025 | Empowering Sustainable Agriculture</p>", unsafe_allow_html=True)
+st.markdown("<p style='text-align: center; color: #E94560;'>AgriGuard © 2025 | AI for Smart Farming</p>", unsafe_allow_html=True)
